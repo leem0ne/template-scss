@@ -1,0 +1,4 @@
+mydocuments/
+node_modules/
+*.txt
+*.zip
