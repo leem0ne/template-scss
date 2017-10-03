@@ -14,8 +14,8 @@ var spritesmith		= require('gulp.spritesmith');
 gulp.task('watch', ['pug', 'scss', 'imagemin', 'browser-sync'], function(){
 	gulp.watch('./app/scss/**/*.scss', ['scss']);
 	gulp.watch('./app/**/*.pug', ['pug']);
-	gulp.watch('./dist/js/*.js', browserSync.reload);
-	//gulp.watch('./dist/*.html', browserSync.reload);
+	gulp.watch('./public/js/*.js', browserSync.reload);
+	//gulp.watch('./public/*.html', browserSync.reload);
 });
 
 
@@ -24,7 +24,7 @@ gulp.task('pug', function(){
 		.pipe(pug({
 			pretty: true
 		}))
-		.pipe(gulp.dest('./dist'))
+		.pipe(gulp.dest('./public'))
 		.pipe(browserSync.reload({
 			stream: true
 		}));
@@ -39,7 +39,7 @@ gulp.task('scss', function () {
 	        browsers: ['last 5 versions'],
 	        cascade: true
 	    }))
-	    .pipe(gulp.dest('./dist/css'))
+	    .pipe(gulp.dest('./public/css'))
 	    .pipe(browserSync.reload({
 			stream: true
 		}));
@@ -49,7 +49,7 @@ gulp.task('scss', function () {
 gulp.task('browser-sync', function(){
 	browserSync({
 		server: {
-			baseDir: './dist',
+			baseDir: './public',
 		},
 		notify: false
 	});
@@ -64,7 +64,7 @@ gulp.task('imagemin', function(){
 		    optimizationLevel: 5,
 		    svgoPlugins: [{removeViewBox: true}]
 		}))
-		.pipe(gulp.dest('./dist/img'));
+		.pipe(gulp.dest('./public/img'));
 });
 
 
@@ -86,20 +86,20 @@ gulp.task('imagesprite', function () {
 gulp.task('jsmin', function() {
   	return gulp.src([
 			'node_modules/slick-carousel/slick/slick.min.js',
-			'node_modules/magnific-popup/dist/jquery.magnific-popup.min.js'
+			'node_modules/magnific-popup/public/jquery.magnific-popup.min.js'
 		])
 	    .pipe(concat('libs.min.js'))
 	    .pipe(uglify())
-	    .pipe(gulp.dest('./dist/js'));
+	    .pipe(gulp.dest('./public/js'));
 });
 
 gulp.task('cssmin', function() {
   	return gulp.src([
-  			'node_modules/magnific-popup/dist/magnific-popup.css'
+  			'node_modules/magnific-popup/public/magnific-popup.css'
   		])
 	    .pipe(concat('libs.min.css'))
 	    .pipe(csso())
-	    .pipe(gulp.dest('./dist/css'));
+	    .pipe(gulp.dest('./public/css'));
 });
 
 
