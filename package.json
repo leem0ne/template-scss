@@ -1,15 +1,14 @@
 {
-  "name": "10another",
+  "name": "template-scss",
   "version": "1.0.0",
   "description": "test",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "leem0ne",
   "license": "ISC",
   "dependencies": {
-    "bootstrap-v4-dev": "^4.0.0-alpha.6",
     "magnific-popup": "^1.1.0",
     "slick-carousel": "^1.7.1"
   },

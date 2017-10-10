@@ -50,16 +50,30 @@ header('Content-type: text/html; charset=utf-8');
 		}else{
 	 
 			/* Формируем сообщение */
-			$address = "email@example.ru";/*Вставляем нужный адрес*/
-			$sub = "Заявка с сайта";/*тема*/
-			$message = "<p>Имя: <strong>$name</strong><br>Email: <strong>$email</strong><br>Телефон: <strong>$phone</strong></p><p>Заполнена форма: $title</p>";
+			require_once('class.phpmailer.php');
+			$mail = new PHPMailer;
 
-			/* Отправка сообщения */
-			$verify = mail($address, $sub, $message, "Content-type:text/html; charset = utf-8\r\nFrom:info@leem-one.ru");
-		 
-			if  ($verify == true){
+			$mail->setFrom('info@leem-one.ru', 'SITE');
+			$mail->addAddress('irbisant@mail.ru');
+			//$mail->addReplyTo('user@email3.com','Slava');
+
+			$mail->isHTML(true);
+			$mail->CharSet = "utf-8";
+			$mail->Port = 587;
+			$mail->SMTPSecure = 'tls';
+
+			$mail->Subject = "Заявка с сайта ";
+			$mail->Body = "<p>Имя: <strong>$name</strong><br>Email: <strong>$email</strong><br>Телефон: <strong>$phone</strong></p><p>Заполнена форма: $title</p>";
+
+			if(file_exists($_FILES['userfile']['tmp_name'])){
+				$mail->AddAttachment($_FILES['userfile']['tmp_name'], $_FILES['userfile']['name']);
+			}
+
+			/* Отправка сообщения */		 
+			if  ( $mail->send() ){
 				$response = $responseError[100];  //сообщение отправлено
 			}else{
+				$error[] = $mail->ErrorInfo;
 				$response = $responseError[101];	 //сообщение не отправлено
 			};
 		}
