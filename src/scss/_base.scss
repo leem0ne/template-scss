@@ -1,0 +1,108 @@
+@import "_library.scss";
+
+/*  БАЗОВЫЕ НАСТРОЙКИ  */
+@include reset();
+html{
+  font-size: 14px;
+
+  @include xs-min {
+    font-size: 16px;
+  }
+  @include sm-min {
+    font-size: 18px;
+  }
+}
+body{
+  font-family: Calibri;
+  line-height: 1.35;
+  font-size: 16px;
+  color: $color1;
+  font-weight: normal;
+  font-style: normal;
+}
+*{
+  box-sizing: border-box;
+  max-height: 100000px;
+}
+a{
+  color: inherit;
+  text-decoration: none;
+
+  &:hover{
+    text-decoration: underline;
+  }
+}
+strong{
+	font-family: Calibrib, Tahoma, sans-serif;
+}
+//input[type="text"]{
+//  @include placeholder($color1);
+//}
+.main-page{
+  min-height: 100vh;
+  min-width: 320px;
+  overflow: hidden;
+}
+.container{
+  position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.text-center{
+  text-align: center;
+}
+.d-ib{
+  display: inline-block;
+}
+.box-btn{
+  text-align: center;
+}
+.btn1{
+  display: inline-block;
+  width: 100%;
+  max-width: 200px;
+  padding: 15px 15px 16px;
+  text-align: center;
+  text-decoration: none;
+  border: 0px;
+  cursor: pointer;
+  background: green;
+  @include transition();
+  color: #fff;
+
+  &:hover{
+    background: darken(green, 10%);
+    text-decoration: none;
+  }
+}
+
+.desc-1{
+  text-align: center;
+  color: $color1;
+
+  @include md-min {
+    font-size: 25px;
+  };
+  @include sm-min {
+    font-size: 30px;
+  };
+  @include xs-min {
+    font-size: 36px;
+  };  
+}
+
+.fz20{
+  font-size: 18px;
+
+  @include sm-min {
+    font-size: 20px;
+  }
+}
+.fz18{
+  font-size: 16px;
+
+  @include sm-min {
+    font-size: 18px;
+  }
+}

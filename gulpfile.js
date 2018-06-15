@@ -1,28 +1,34 @@
-var gulp 			= require('gulp');
-var sass 			= require('gulp-sass');
+var gulp 					= require('gulp');
+var sass 					= require('gulp-sass');
 var autoprefixer 	= require('gulp-autoprefixer');
-var gcmq 			= require('gulp-group-css-media-queries');
-var pug 			= require('gulp-pug');
+var gcmq 					= require('gulp-group-css-media-queries');
+var pug 					= require('gulp-pug');
 var browserSync 	= require('browser-sync');
-var imagemin		= require('gulp-imagemin');
-var concat			= require('gulp-concat');
-var uglify 			= require('gulp-uglify');
-var csso 			= require('gulp-csso');
-var spritesmith		= require('gulp.spritesmith');
+var imagemin			= require('gulp-imagemin');
+var concat				= require('gulp-concat');
+var uglify 				= require('gulp-uglify');
+var csso 					= require('gulp-csso');
+var spritesmith		= require('gulp.spritesmith')
+	cleanCSS 				= require('gulp-clean-css'),
+	notify 					= require("gulp-notify");
 
 
-gulp.task('watch', ['pug', 'scss', 'imagemin', 'browser-sync'], function(){
-	gulp.watch('./app/scss/**/*.scss', ['scss']);
-	gulp.watch('./app/**/*.pug', ['pug']);
+gulp.task('watch', ['pug', 'scss', 'browser-sync'], function(){
+	gulp.watch('./src/scss/**/*.scss', ['scss']);
+	gulp.watch('./src/**/*.pug', ['pug']);
 	gulp.watch('./public/js/*.js', browserSync.reload);
 	//gulp.watch('./public/*.html', browserSync.reload);
 });
 
 
 gulp.task('pug', function(){
-	return gulp.src('./app/index.pug')
+	return gulp.src('./src/index.pug')
 		.pipe(pug({
 			pretty: true
+		}))
+		.on("error", notify.onError({
+			message: "Pug-Error: <%= error.message %>",
+			title: "Pug"
 		}))
 		.pipe(gulp.dest('./public'))
 		.pipe(browserSync.reload({
@@ -32,15 +38,20 @@ gulp.task('pug', function(){
 
 
 gulp.task('scss', function () {
-	return gulp.src('./app/scss/**/*.scss')
-	    .pipe(sass().on('error', sass.logError))
-	    .pipe(gcmq())
-	    .pipe(autoprefixer({
-	        browsers: ['last 5 versions'],
-	        cascade: true
-	    }))
-	    .pipe(gulp.dest('./public/css'))
-	    .pipe(browserSync.reload({
+	return gulp.src('./src/scss/**/*.scss')
+    .pipe(sass())
+		.on("error", notify.onError({
+			message: "SCSS-Error: <%= error.message %>",
+			title: "SCSS"
+		}))
+    .pipe(gcmq())
+    .pipe(autoprefixer({
+        browsers: ['last 5 versions'],
+        cascade: true
+    }))
+    .pipe(cleanCSS({compatibility: 'ie8', format: 'keep-breaks'}))
+    .pipe(gulp.dest('./public/css'))
+    .pipe(browserSync.reload({
 			stream: true
 		}));
 });
@@ -57,7 +68,7 @@ gulp.task('browser-sync', function(){
 
 
 gulp.task('imagemin', function(){
-	return gulp.src('./app/img/**/*')
+	return gulp.src('./src/img/**/*')
 		.pipe(imagemin({
 			interlaced: true,
 		    progressive: true,
@@ -70,7 +81,7 @@ gulp.task('imagemin', function(){
 
 var icons = 'icons';
 gulp.task('imagesprite', function () {
-  return gulp.src('./app/img/' + icons + '/*.png')
+  return gulp.src('./src/img/' + icons + '/*.png')
   	.pipe(spritesmith({
   		algorithms: 'binary-tree',
 	    imgName: icons + '.png',
@@ -79,14 +90,16 @@ gulp.task('imagesprite', function () {
 	    imgPath: '../img/' + icons + '.png',
 	    padding: 10,
 	  }))
-	  .pipe(gulp.dest('./app/img/'));
+	  .pipe(gulp.dest('./src/img/'));
 });
 
 
 gulp.task('jsmin', function() {
   	return gulp.src([
+  		'node_modules/jquery/dist/jquery.min.js',
 			'node_modules/slick-carousel/slick/slick.min.js',
-			'node_modules/magnific-popup/public/jquery.magnific-popup.min.js'
+			'node_modules/magnific-popup/dist/jquery.magnific-popup.min.js',
+			'./src/libs/*.js'
 		])
 	    .pipe(concat('libs.min.js'))
 	    .pipe(uglify())
@@ -95,7 +108,8 @@ gulp.task('jsmin', function() {
 
 gulp.task('cssmin', function() {
   	return gulp.src([
-  			'node_modules/magnific-popup/public/magnific-popup.css'
+  			'node_modules/magnific-popup/dist/magnific-popup.css',
+  			'./src/libs/*.css'
   		])
 	    .pipe(concat('libs.min.css'))
 	    .pipe(csso())
@@ -147,5 +161,5 @@ var settings = {
 };
 
 gulp.task('smartgrid', function() {
-  return smartgrid('./app/scss', settings);
+  return smartgrid('./src/scss', settings);
 });

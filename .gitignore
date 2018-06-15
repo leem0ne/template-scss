@@ -2,3 +2,4 @@ mydocuments/
 node_modules/
 *.txt
 *.zip
+package-lock.json
